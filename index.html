@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Window to Nature</title>
+  <meta name="description" content="A full-screen window into mountains, forests, valleys and live nature streams from around the world.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Instrument+Serif&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Loading state -->
+  <div class="status-msg" id="status">
+    <div class="status-title">Window to Nature</div>
+    <span id="status-text">Loading your view...</span>
+  </div>
+
+  <!-- Scene canvas — two layers for crossfade -->
+  <div id="canvas">
+    <div class="scene" id="scene-a"></div>
+    <div class="scene" id="scene-b"></div>
+  </div>
+
+  <!-- Info overlay -->
+  <div class="info-overlay" id="info-overlay">
+    <div class="info-blur-layer" id="info-backdrop"></div>
+    <div class="info-card">
+      <button class="info-card-close" id="info-close">&times;</button>
+      <h2>A window into<br>the world outside</h2>
+      <p>Window to Nature was made for the moments when you're deep in work and need a place for your eyes to rest — a view that isn't your office wall, your cluttered desk, or another browser tab.</p>
+      <p>It's a simple, full-screen window into mountains, forests, valleys and live nature streams from around the world. No ads, no distractions, no signup. Just nature.</p>
+      <div class="info-card-divider"></div>
+      <a class="info-link" href="https://www.calumma.design/" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        Made by Calumma
+      </a>
+      <div class="info-card-divider"></div>
+      <div class="info-card-footer">Photography via Unsplash &amp; Pexels &middot; Live streams via Africam &middot; Sounds under Creative Commons</div>
+    </div>
+  </div>
+
+  <!-- UI overlay -->
+  <div class="ui-layer">
+
+    <!-- Mode toggle -->
+    <div class="mode-toggle">
+      <button class="mode-btn active" data-mode="images" id="btn-images">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+        Stills
+      </button>
+      <button class="mode-btn" data-mode="streams" id="btn-streams">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+        Live
+      </button>
+    </div>
+
+    <!-- Top-right: live badge + audio player + info -->
+    <div class="top-right-group">
+      <div class="live-indicator" id="live-indicator">
+        <div class="live-dot"></div>
+        Live
+      </div>
+
+      <div class="audio-player collapsed" id="audio-player">
+        <div class="audio-controls" id="audio-controls">
+          <button class="audio-skip-btn" id="audio-prev" aria-label="Previous sound">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5"/></svg>
+          </button>
+          <span class="audio-track-name" id="audio-track-name"></span>
+          <button class="audio-skip-btn" id="audio-next" aria-label="Next sound">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
+          </button>
+          <div class="audio-divider"></div>
+          <input type="range" class="audio-volume-slider" id="audio-volume" min="0" max="100" value="40">
+          <div class="audio-divider"></div>
+        </div>
+        <button class="audio-toggle" id="audio-toggle" aria-label="Toggle ambient sound">
+          <svg id="ico-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+          <svg id="ico-playing" style="display:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+        </button>
+      </div>
+
+      <button class="info-btn" id="info-btn" aria-label="About Window to Nature">i</button>
+    </div>
+
+    <!-- Navigation arrows -->
+    <button class="nav-arrow nav-prev" id="prev" aria-label="Previous">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <button class="nav-arrow nav-next" id="next" aria-label="Next">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+
+    <!-- Attribution -->
+    <a class="credit" id="credit" href="#" target="_blank" rel="noopener noreferrer">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      <span id="credit-name"></span>
+      <span class="credit-divider"></span>
+      <span class="credit-meta" id="credit-meta"></span>
+      <span class="credit-divider" id="credit-loc-divider"></span>
+      <span class="credit-location" id="credit-location"></span>
+    </a>
+
+    <div class="counter" id="counter"></div>
+
+    <div class="keyboard-hint">
+      <span class="key-icon">&larr;</span> <span class="key-icon">&rarr;</span> navigate
+      &nbsp;&nbsp;
+      <span class="key-icon">S</span> switch mode
+      &nbsp;&nbsp;
+      <span class="key-icon">M</span> sound
+    </div>
+
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
