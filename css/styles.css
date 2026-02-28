@@ -4,9 +4,9 @@
   --transition-speed: 1.2s;
   --font-body: 'DM Sans', sans-serif;
   --font-display: 'Instrument Serif', serif;
-  --pill-bg: rgba(0,0,0,0.35);
-  --pill-border: rgba(255,255,255,0.08);
-  --pill-blur: blur(16px);
+  --pill-bg: rgba(0,0,0,0.55);
+  --pill-border: rgba(255,255,255,0.12);
+  --pill-blur: blur(20px);
 }
 
 html, body {
@@ -91,15 +91,14 @@ body.ui-visible .ui-layer * { pointer-events: auto; }
   position: absolute; top: 50%; transform: translateY(-50%);
   width: 48px; height: 48px;
   display: flex; align-items: center; justify-content: center;
-  background: rgba(255,255,255,0.06);
-  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.14);
   border-radius: 50%;
-  color: rgba(255,255,255,0.7);
+  color: rgba(255,255,255,0.8);
   cursor: pointer;
   transition: all 0.3s ease;
   outline: none;
-  will-change: transform;
 }
 .nav-arrow:hover {
   background: rgba(255,255,255,0.12); color: white;
@@ -118,7 +117,6 @@ body.ui-visible .ui-layer * { pointer-events: auto; }
   backdrop-filter: var(--pill-blur); -webkit-backdrop-filter: var(--pill-blur);
   border: 1px solid var(--pill-border);
   border-radius: 28px; padding: 4px;
-  will-change: transform;
 }
 
 .mode-btn {
@@ -209,17 +207,16 @@ body.ui-visible .ui-layer * { pointer-events: auto; }
 .info-btn {
   width: 34px; height: 34px;
   display: flex; align-items: center; justify-content: center;
-  background: rgba(255,255,255,0.06);
-  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.14);
   border-radius: 50%;
-  color: rgba(255,255,255,0.5);
+  color: rgba(255,255,255,0.7);
   cursor: pointer; transition: all 0.3s ease; outline: none;
   font-family: var(--font-display);
   font-size: 15px; font-style: italic;
   line-height: 1; padding-top: 1px;
   flex-shrink: 0;
-  will-change: transform;
 }
 .info-btn:hover {
   background: rgba(255,255,255,0.12);
@@ -240,7 +237,6 @@ body.ui-visible .ui-layer * { pointer-events: auto; }
   padding: 4px;
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   overflow: hidden;
-  will-change: transform;
 }
 
 .audio-player.collapsed {
@@ -436,10 +432,6 @@ body.ui-visible .ui-layer * { pointer-events: auto; }
    MOBILE
    ══════════════════════════════════════════════ */
 
-/* ══════════════════════════════════════════════
-   MOBILE
-   ══════════════════════════════════════════════ */
-
 @media (max-width: 768px) {
   html, body { cursor: default; }
 
@@ -452,7 +444,7 @@ body.ui-visible .ui-layer * { pointer-events: auto; }
      Expanded = full-width frosted panel anchored to the bottom edge. */
 
   .audio-player {
-    position: absolute;
+    position: fixed;  /* fixed escapes .top-right-group's containing block */
     left: 0;
     right: 0;
     border-radius: 0;
