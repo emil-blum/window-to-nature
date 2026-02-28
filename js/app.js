@@ -315,11 +315,23 @@
     var iframe = document.createElement('iframe');
     iframe.src = 'https://www.youtube.com/embed/' + item.embedId
       + '?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0'
-      + '&showinfo=0&iv_load_policy=3&playsinline=1&enablejsapi=1';
+      + '&showinfo=0&iv_load_policy=3&playsinline=1&enablejsapi=1'
+      + '&fs=0&disablekb=1';
     iframe.allow = 'autoplay; encrypted-media';
-    iframe.allowFullscreen = true;
+    iframe.allowFullscreen = false;
     iframe.loading = 'lazy';
-    target.appendChild(iframe);
+    iframe.style.cssText = 'width:100%;height:100%;border:none;display:block;';
+
+    // Transparent overlay blocks clicks from reaching YouTube UI,
+    // preventing the player from going fullscreen or navigating away.
+    var overlay = document.createElement('div');
+    overlay.style.cssText = 'position:absolute;inset:0;z-index:1;';
+
+    var wrapper = document.createElement('div');
+    wrapper.style.cssText = 'position:absolute;inset:0;';
+    wrapper.appendChild(iframe);
+    wrapper.appendChild(overlay);
+    target.appendChild(wrapper);
 
     updateUI();
     statusEl.classList.add('hidden');

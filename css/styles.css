@@ -419,3 +419,26 @@ body.ui-visible .ui-layer * { pointer-events: auto; }
   font-size: 11px; color: rgba(255,255,255,0.3);
   font-weight: 300; letter-spacing: 0.04em;
 }
+
+/* ══════════════════════════════════════════════
+   MOBILE
+   ══════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  /* Touch devices don't need keyboard shortcuts */
+  .keyboard-hint { display: none; }
+
+  /* Show default cursor on touch devices */
+  html, body { cursor: default; }
+
+  /* Audio player stays as icon-only — never expands.
+     Prevents it from overlapping the mode toggle. */
+  .audio-player.expanded .audio-controls {
+    max-width: 0 !important;
+    opacity: 0 !important;
+  }
+  .audio-player.expanded {
+    padding: 0;
+    background: rgba(255,255,255,0.06);
+  }
+}
