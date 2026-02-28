@@ -39,6 +39,7 @@ body.ui-visible { cursor: default; }
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.5s ease;
+  will-change: opacity;
 }
 
 body.ui-visible .ui-layer { opacity: 1; }
@@ -98,6 +99,7 @@ body.ui-visible .ui-layer * { pointer-events: auto; }
   cursor: pointer;
   transition: all 0.3s ease;
   outline: none;
+  will-change: transform;
 }
 .nav-arrow:hover {
   background: rgba(255,255,255,0.12); color: white;
@@ -116,6 +118,7 @@ body.ui-visible .ui-layer * { pointer-events: auto; }
   backdrop-filter: var(--pill-blur); -webkit-backdrop-filter: var(--pill-blur);
   border: 1px solid var(--pill-border);
   border-radius: 28px; padding: 4px;
+  will-change: transform;
 }
 
 .mode-btn {
@@ -216,6 +219,7 @@ body.ui-visible .ui-layer * { pointer-events: auto; }
   font-size: 15px; font-style: italic;
   line-height: 1; padding-top: 1px;
   flex-shrink: 0;
+  will-change: transform;
 }
 .info-btn:hover {
   background: rgba(255,255,255,0.12);
@@ -236,6 +240,7 @@ body.ui-visible .ui-layer * { pointer-events: auto; }
   padding: 4px;
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   overflow: hidden;
+  will-change: transform;
 }
 
 .audio-player.collapsed {
@@ -420,25 +425,100 @@ body.ui-visible .ui-layer * { pointer-events: auto; }
   font-weight: 300; letter-spacing: 0.04em;
 }
 
+.info-desktop-note {
+  font-size: 12px !important;
+  color: rgba(255,255,255,0.28) !important;
+  font-style: italic;
+  margin-bottom: 0 !important;
+}
+
+/* ══════════════════════════════════════════════
+   MOBILE
+   ══════════════════════════════════════════════ */
+
 /* ══════════════════════════════════════════════
    MOBILE
    ══════════════════════════════════════════════ */
 
 @media (max-width: 768px) {
-  /* Touch devices don't need keyboard shortcuts */
-  .keyboard-hint { display: none; }
-
-  /* Show default cursor on touch devices */
   html, body { cursor: default; }
 
-  /* Audio player stays as icon-only — never expands.
-     Prevents it from overlapping the mode toggle. */
-  .audio-player.expanded .audio-controls {
-    max-width: 0 !important;
-    opacity: 0 !important;
+  /* Keyboard hints are irrelevant on touch */
+  .keyboard-hint { display: none; }
+
+  /* ── Mobile audio player: bottom bar ──
+     Pulled out of the top-right flex group via absolute positioning.
+     Collapsed = floating icon at bottom-right.
+     Expanded = full-width frosted panel anchored to the bottom edge. */
+
+  .audio-player {
+    position: absolute;
+    left: 0;
+    right: 0;
+    border-radius: 0;
+    overflow: visible;
   }
+
+  .audio-player.collapsed {
+    bottom: 60px;                       /* float above the credit line */
+    background: transparent;
+    border-color: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    justify-content: flex-end;
+    padding: 0 16px 0 0;
+  }
+
+  /* Give the toggle button its own pill when the container is transparent */
+  .audio-player.collapsed .audio-toggle {
+    background: var(--pill-bg);
+    backdrop-filter: var(--pill-blur);
+    -webkit-backdrop-filter: var(--pill-blur);
+    border: 1px solid var(--pill-border);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+  }
+
+  /* Expanded: slides to bottom edge, full width */
   .audio-player.expanded {
-    padding: 0;
-    background: rgba(255,255,255,0.06);
+    bottom: 0;
+    border-radius: 20px 20px 0 0;
+    padding: 14px 20px 36px;            /* 36px clears iPhone home indicator */
+    background: rgba(0, 0, 0, 0.88);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    gap: 4px;
+    overflow: hidden;
+  }
+
+  .audio-player.expanded .audio-controls {
+    max-width: 100vw !important;
+    opacity: 1 !important;
+    flex: 1;
+    gap: 8px;
+  }
+
+  .audio-player.expanded .audio-toggle {
+    flex-shrink: 0;
+  }
+
+  .audio-track-name {
+    flex: 1;
+    max-width: none;
+    text-align: center;
+  }
+
+  .audio-volume-slider {
+    width: 72px;                        /* wider for touch targets */
+  }
+
+  /* Prevent the invisible collapsed container from eating taps */
+  body.ui-visible .audio-player.collapsed {
+    pointer-events: none;
+  }
+  body.ui-visible .audio-player.collapsed .audio-toggle {
+    pointer-events: auto;
   }
 }
