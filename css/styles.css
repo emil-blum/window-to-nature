@@ -133,7 +133,7 @@ body.ui-visible .ui-layer * { pointer-events: auto; }
 /* ── Credit / Attribution ── */
 .credit {
   position: absolute;
-  bottom: 24px; left: 28px;
+  bottom: 14px; left: 16px;
   display: flex; align-items: center; gap: 8px;
   font-size: 12px; font-weight: 300;
   color: rgba(255,255,255,0.75);
@@ -182,12 +182,12 @@ body.ui-visible .ui-layer * { pointer-events: auto; }
 }
 .nav-arrow:active { transform: translateY(-50%) scale(0.96); }
 .nav-arrow svg { width: 18px; height: 18px; }
-.nav-prev { left: 24px; }
-.nav-next { right: 24px; }
+.nav-prev { left: 8px; }
+.nav-next { right: 8px; }
 
 /* ── Mode toggle ── */
 .mode-toggle {
-  position: absolute; top: 24px; left: 50%; transform: translateX(-50%);
+  position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
   display: flex; align-items: center;
   background: var(--pill-bg);
   backdrop-filter: var(--pill-blur); -webkit-backdrop-filter: var(--pill-blur);
@@ -210,7 +210,7 @@ body.ui-visible .ui-layer * { pointer-events: auto; }
 
 /* ── Counter ── */
 .counter {
-  position: absolute; bottom: 26px; right: 28px;
+  position: absolute; bottom: 16px; right: 16px;
   font-size: 11px; font-weight: 300;
   color: rgba(255,255,255,0.35);
   letter-spacing: 0.08em;
@@ -257,7 +257,7 @@ body.ui-visible .ui-layer * { pointer-events: auto; }
 
 /* ── Keyboard hint ── */
 .keyboard-hint {
-  position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
+  position: absolute; bottom: 17px; left: 50%; transform: translateX(-50%);
   font-size: 10px; color: rgba(255,255,255,0.2);
   letter-spacing: 0.1em; white-space: nowrap;
 }
@@ -274,7 +274,7 @@ body.ui-visible .ui-layer * { pointer-events: auto; }
 
 .top-right-group {
   position: absolute;
-  top: 24px; right: 28px;
+  top: 10px; right: 12px;
   display: flex; align-items: center;
   gap: 10px;
 }
@@ -513,6 +513,14 @@ body.ui-visible .ui-layer * { pointer-events: auto; }
 
   /* Frame is a desktop-only concept */
   .frame-glass, .frame-window-edge { display: none; }
+
+  /* Restore comfortable positions without the frame to anchor against */
+  .mode-toggle { top: 16px; }
+  .top-right-group { top: 16px; right: 16px; }
+  .nav-prev { left: 12px; }
+  .nav-next { right: 12px; }
+  .credit { bottom: 16px; left: 16px; }
+  .counter { bottom: 16px; right: 16px; }
 
   /* Keyboard hints are irrelevant on touch */
   .keyboard-hint { display: none; }
