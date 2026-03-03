@@ -7,6 +7,10 @@
   --pill-bg: rgba(0,0,0,0.55);
   --pill-border: rgba(255,255,255,0.12);
   --pill-blur: blur(20px);
+  --frame-size: 56px;
+  --frame-radius: 20px;
+  --frame-speed: 1s;
+  --frame-ease: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 html, body {
@@ -33,12 +37,84 @@ body.ui-visible { cursor: default; }
 .scene img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .scene iframe { width: 100%; height: 100%; border: none; display: block; }
 
+/* ══════════════════════════════════════════════
+   FROSTED GLASS WINDOW FRAME
+   Single-element mask-composite approach:
+   the element stretches beyond the viewport so
+   only the border region (the "frame") is ever
+   visible. Animating border-width slides the
+   frame inward from all edges simultaneously.
+   ══════════════════════════════════════════════ */
+
+.frame-glass {
+  position: fixed;
+  z-index: 8;
+  pointer-events: none;
+
+  /* Extend beyond viewport to hide outer border-radius curves */
+  top:    calc(-1 * (var(--frame-size) + var(--frame-radius)));
+  left:   calc(-1 * (var(--frame-size) + var(--frame-radius)));
+  right:  calc(-1 * (var(--frame-size) + var(--frame-radius)));
+  bottom: calc(-1 * (var(--frame-size) + var(--frame-radius)));
+
+  background: rgba(20, 20, 20, 0.35);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+
+  /* Initial: border matches offset → transparent hole covers full screen */
+  border: calc(var(--frame-size) + var(--frame-radius)) solid transparent;
+  border-radius: calc(var(--frame-size) + var(--frame-radius));
+
+  /* Mask punches out the padding-box center, leaving only the border ring */
+  -webkit-mask:
+    linear-gradient(#fff 0 0) padding-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#fff 0 0) padding-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+
+  transition:
+    border-width var(--frame-speed) var(--frame-ease),
+    border-radius var(--frame-speed) var(--frame-ease);
+}
+
+body.ui-visible .frame-glass {
+  border-width: calc((var(--frame-size) * 2) + var(--frame-radius));
+  border-radius: calc((var(--frame-size) * 2) + (var(--frame-radius) * 2));
+}
+
+/* Thin border drawn at the inner window opening */
+.frame-window-edge {
+  position: fixed;
+  inset: 0;
+  border-radius: 0;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow:
+    inset 0 0 40px rgba(0, 0, 0, 0.12),
+    inset 0 0 4px rgba(255, 255, 255, 0.02);
+  pointer-events: none;
+  z-index: 9;
+  opacity: 0;
+  transition:
+    inset var(--frame-speed) var(--frame-ease),
+    border-radius var(--frame-speed) var(--frame-ease),
+    opacity 0.5s ease 0.15s;
+}
+
+body.ui-visible .frame-window-edge {
+  inset: var(--frame-size);
+  border-radius: var(--frame-radius);
+  opacity: 1;
+}
+
 /* ── UI Overlay ── */
 .ui-layer {
   position: fixed; inset: 0; z-index: 10;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 0.5s ease;
+  transition: opacity 0.5s ease 0.1s; /* slight delay lets frame lead */
   will-change: opacity;
 }
 
@@ -434,6 +510,9 @@ body.ui-visible .ui-layer * { pointer-events: auto; }
 
 @media (max-width: 768px) {
   html, body { cursor: default; }
+
+  /* Frame is a desktop-only concept */
+  .frame-glass, .frame-window-edge { display: none; }
 
   /* Keyboard hints are irrelevant on touch */
   .keyboard-hint { display: none; }
