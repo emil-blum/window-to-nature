@@ -9,74 +9,312 @@
 
   var IMAGES = [
     {
-      url: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=2560&q=85',
-      photographer: 'Samuel Ferrara',
+      url: 'https://images.unsplash.com/photo-1772289935663-80aa987be656?w=2560&q=85&fm=webp&auto=format',
+      photographer: 'NIR HIMI',
+      link: 'https://unsplash.com/@nirhimi',
+      source: 'Unsplash',
+      location: 'Spitzkoppe, Namibia'
+    },
+    {
+      url: 'https://images.unsplash.com/photo-1771149076648-d0fdcd270f86?w=2560&q=85&fm=webp&auto=format',
+      photographer: 'Kristaps Ungurs',
+      link: 'https://unsplash.com/@kristapsungurs',
+      source: 'Unsplash',
+      location: 'Location unknown'
+    },
+    {
+      url: 'https://images.unsplash.com/photo-1772289935247-2de4bcacd7b4?w=2560&q=85&fm=webp&auto=format',
+      photographer: 'NIR HIMI',
+      link: 'https://unsplash.com/@nirhimi',
+      source: 'Unsplash',
+      location: 'Spitzkoppe, Namibia'
+    },
+    {
+      url: 'https://images.unsplash.com/flagged/photo-1591409607878-b6b0221ceba8?w=2560&q=85&fm=webp&auto=format',
+      photographer: 'Tori Wise',
+      link: 'https://unsplash.com/@toriwisephoto',
+      source: 'Unsplash',
+      location: 'San Diego, California, USA'
+    },
+    {
+      url: 'https://images.unsplash.com/photo-1768834582204-3430797f89be?w=2560&q=85&fm=webp&auto=format',
+      photographer: 'Alan Jiang',
+      link: 'https://unsplash.com/@alan_j',
+      source: 'Unsplash',
+      location: 'Seceda, South Tyrol, Italy'
+    },
+    {
+      url: 'https://images.unsplash.com/photo-1770490085047-1460359929e7?w=2560&q=85&fm=webp&auto=format',
+      photographer: 'Iuliu Illes',
+      link: 'https://unsplash.com/@illes_cristi',
+      source: 'Unsplash',
+      location: 'Location unknown'
+    },
+    {
+      url: 'https://images.unsplash.com/photo-1768409234914-96f61529b7e2?w=2560&q=85&fm=webp&auto=format',
+      photographer: 'Intricate Explorer',
+      link: 'https://unsplash.com/@intricateexplorer',
+      source: 'Unsplash',
+      location: 'Gardena Pass, South Tyrol, Italy'
+    },
+    {
+      url: 'https://images.unsplash.com/photo-1770027217960-a0a09e423b77?w=2560&q=85&fm=webp&auto=format',
+      photographer: 'Evgeni Tcherkasski',
+      link: 'https://unsplash.com/@evgenit',
+      source: 'Unsplash',
+      location: 'Kaiserstuhl, Germany'
+    },
+    {
+      url: 'https://images.unsplash.com/photo-1769631417306-a1da09f42b20?w=2560&q=85&fm=webp&auto=format',
+      photographer: 'Marek Piwnicki',
+      link: 'https://unsplash.com/@marekpiwnicki',
+      source: 'Unsplash',
+      location: 'South Tyrol, Italy'
+    },
+    {
+      url: 'https://images.unsplash.com/photo-1769112112580-cee0f8a30413?w=2560&q=85&fm=webp&auto=format',
+      photographer: 'Dawid Zawiła',
+      link: 'https://unsplash.com/@davealmine',
+      source: 'Unsplash',
+      location: 'Location unknown'
+    },
+    {
+      url: 'https://images.unsplash.com/photo-1578637959542-ab12e1cbf39c?w=2560&q=85&fm=webp&auto=format',
+      photographer: 'Arun Clarke',
+      link: 'https://unsplash.com/@arunclarke',
+      source: 'Unsplash',
+      location: 'Dandenong Ranges, Australia'
+    },
+    {
+      url: 'https://images.unsplash.com/photo-1766548730089-e446483315b1?w=2560&q=85&fm=webp&auto=format',
+      photographer: 'Venti Views',
+      link: 'https://unsplash.com/@ventiviews',
+      source: 'Unsplash',
+      location: 'Alabama Hills, California, USA'
+    },
+    {
+      url: 'https://images.unsplash.com/photo-1762291834384-09118dda091d?w=2560&q=85&fm=webp&auto=format',
+      photographer: 'Nik Iurev',
+      link: 'https://unsplash.com/@lastoops',
+      source: 'Unsplash',
+      location: 'Newfoundland, Canada'
+    },
+    {
+      url: 'https://images.unsplash.com/photo-1639762940561-71e891372b1e?w=2560&q=85&fm=webp&auto=format',
+      photographer: 'Michele Marchesi',
+      link: 'https://unsplash.com/@michelemarchesi',
+      source: 'Unsplash',
+      location: 'Monte Guglielmo, Italy'
+    },
+    {
+      url: 'https://images.unsplash.com/photo-1765498068244-eb6043487aa3?w=2560&q=85&fm=webp&auto=format',
+      photographer: 'Royce Fonseca',
+      link: 'https://unsplash.com/@casunshine0508',
+      source: 'Unsplash',
+      location: 'White Sands, New Mexico, USA'
+    },
+    {
+      url: 'https://images.unsplash.com/photo-1765476608471-c30c09564def?w=2560&q=85&fm=webp&auto=format',
+      photographer: 'Marek Piwnicki',
+      link: 'https://unsplash.com/@marekpiwnicki',
+      source: 'Unsplash',
+      location: 'Dolomites, Italy'
+    },
+    {
+      url: 'https://images.unsplash.com/photo-1722505113117-c5e663002b3d?w=2560&q=85&fm=webp&auto=format',
+      photographer: 'Maksim Shutov',
+      link: 'https://unsplash.com/@maksimshutov',
+      source: 'Unsplash',
+      location: 'Estonia'
+    },
+    {
+      url: 'https://images.unsplash.com/photo-1557310017-faa4256c4169?w=2560&q=85&fm=webp&auto=format',
+      photographer: 'Bilou Bilal',
+      link: 'https://unsplash.com/@biloubilou',
+      source: 'Unsplash',
+      location: 'Algeria'
+    },
+    {
+      url: 'https://images.unsplash.com/photo-1473448912268-2022ce9509d8?w=2560&q=85&fm=webp&auto=format',
+      photographer: 'Luca Bravo',
+      link: 'https://unsplash.com/@lucabravo',
+      source: 'Unsplash',
+      location: 'Lago di Braies, Italy'
+    },
+    {
+      url: 'https://images.unsplash.com/photo-1533219480925-55054b668f15?w=2560&q=85&fm=webp&auto=format',
+      photographer: 'Sicheng Liu',
+      link: 'https://unsplash.com/@lsc122746',
+      source: 'Unsplash',
+      location: 'Saihanba, China'
+    },
+    {
+      url: 'https://images.unsplash.com/photo-1472017454701-20a80cfeaac5?w=2560&q=85&fm=webp&auto=format',
+      photographer: 'Vlad Shapochnikov',
+      link: 'https://unsplash.com/@vladshap',
+      source: 'Unsplash',
+      location: 'Lake Louise, Canada'
+    },
+    {
+      url: 'https://images.unsplash.com/photo-1454982523318-4b6396f39d3a?w=2560&q=85&fm=webp&auto=format',
+      photographer: 'Christian Joudrey',
+      link: 'https://unsplash.com/@cjoudrey',
+      source: 'Unsplash',
+      location: 'Yosemite, USA'
+    },
+    {
+      url: 'https://images.unsplash.com/photo-1500885168199-dc1fde1d8177?w=2560&q=85&fm=webp&auto=format',
+      photographer: 'Niklas Tidbury',
+      link: 'https://unsplash.com/@ntidbury',
+      source: 'Unsplash',
+      location: 'Appenzell, Switzerland'
+    },
+    {
+      url: 'https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?w=2560&q=85&fm=webp&auto=format',
+      photographer: 'Damian Patkowski',
+      link: 'https://unsplash.com/@damianpatkowski',
+      source: 'Unsplash',
+      location: 'Tsavo, Kenya'
+    },
+    {
+      url: 'https://images.unsplash.com/photo-1532574754390-44dc5c6780bb?w=2560&q=85&fm=webp&auto=format',
+      photographer: 'Justin Lane',
+      link: 'https://unsplash.com/@justinflane',
+      source: 'Unsplash',
+      location: 'Serengeti, Tanzania'
+    },
+    {
+      url: 'https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=2560&q=85&fm=webp&auto=format',
+      photographer: 'Lightscape',
+      link: 'https://unsplash.com/@lightscape',
+      source: 'Unsplash',
+      location: 'Tromsø, Norway'
+    },
+    {
+      url: 'https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=2560&q=85&fm=webp&auto=format',
+      photographer: 'Robert Lukeman',
+      link: 'https://unsplash.com/@robertlukeman',
+      source: 'Unsplash',
+      location: 'Isle of Skye, Scotland'
+    },
+    {
+      url: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=2560&q=85&fm=webp&auto=format',
+      photographer: 'Sam Ferrara',
       link: 'https://unsplash.com/@samferrara',
       source: 'Unsplash',
       location: 'Swiss Alps, Switzerland'
     },
     {
-      url: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=2560&q=85',
+      url: 'https://images.unsplash.com/photo-1515250650815-aba93cc397cc?w=2560&q=85&fm=webp&auto=format',
+      photographer: 'Sam Ferrara',
+      link: 'https://unsplash.com/@samferrara',
+      source: 'Unsplash',
+      location: 'New Zealand'
+    },
+    {
+      url: 'https://images.unsplash.com/photo-1588171620174-cde0df33c7db?w=2560&q=85&fm=webp&auto=format',
+      photographer: 'Ruedi Häberli',
+      link: 'https://unsplash.com/@ruehab',
+      source: 'Unsplash',
+      location: 'Iceland'
+    },
+    {
+      url: 'https://images.unsplash.com/photo-1695105875900-3b75051bc326?w=2560&q=85&fm=webp&auto=format',
+      photographer: 'Zetong Li',
+      link: 'https://unsplash.com/@zetong',
+      source: 'Unsplash',
+      location: 'Location unknown'
+    },
+    {
+      url: 'https://images.unsplash.com/photo-1762976130179-4e534beff854?w=2560&q=85&fm=webp&auto=format',
+      photographer: 'Sergei Shershen',
+      link: 'https://unsplash.com/@mackgreeb',
+      source: 'Unsplash',
+      location: 'Karelia, Russia'
+    },
+    {
+      url: 'https://images.unsplash.com/photo-1540185814346-be28d041252e?w=2560&q=85&fm=webp&auto=format',
+      photographer: 'Gatis Vilaks',
+      link: 'https://unsplash.com/@gatisv',
+      source: 'Unsplash',
+      location: 'Latvia'
+    },
+    {
+      url: 'https://images.unsplash.com/photo-1628191606196-55736afd793b?w=2560&q=85&fm=webp&auto=format',
+      photographer: 'Lāsma Fedotova',
+      link: 'https://unsplash.com/@lasma_fedotova',
+      source: 'Unsplash',
+      location: 'Latvia'
+    },
+    {
+      url: 'https://images.unsplash.com/photo-1760132562597-dd9c467cd9cf?w=2560&q=85&fm=webp&auto=format',
       photographer: 'Lukasz Szmigiel',
       link: 'https://unsplash.com/@szmigieldesign',
       source: 'Unsplash',
-      location: 'Foggy forest valley'
+      location: 'Veľký Rozsutec, Slovakia'
     },
     {
-      url: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=2560&q=85',
+      url: 'https://images.unsplash.com/photo-1462400362591-9ca55235346a?w=2560&q=85&fm=webp&auto=format',
+      photographer: 'Christian Joudrey',
+      link: 'https://unsplash.com/@cjoudrey',
+      source: 'Unsplash',
+      location: 'Maui, Hawaii, USA'
+    },
+    {
+      url: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=2560&q=85&fm=webp&auto=format',
       photographer: 'Qingbao Meng',
       link: 'https://unsplash.com/@ideasboom',
       source: 'Unsplash',
-      location: 'Aerial green hills'
+      location: 'Location unknown'
     },
     {
-      url: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=2560&q=85',
+      url: 'https://images.unsplash.com/photo-1571692714879-48c5c6f76831?w=2560&q=85&fm=webp&auto=format',
       photographer: 'Luca Bravo',
       link: 'https://unsplash.com/@lucabravo',
       source: 'Unsplash',
-      location: 'Forest path, Germany'
+      location: 'Italy'
     },
     {
-      url: 'https://images.unsplash.com/photo-1465056836900-8f1e940b2eb8?w=2560&q=85',
-      photographer: 'Dave Hoefler',
-      link: 'https://unsplash.com/@davehoefler',
+      url: 'https://images.unsplash.com/photo-1571164330912-270c6d07e212?w=2560&q=85&fm=webp&auto=format',
+      photographer: 'Luca Bravo',
+      link: 'https://unsplash.com/@lucabravo',
       source: 'Unsplash',
-      location: 'Mountain lake, Oregon'
+      location: 'Val di Funes, Italy'
     },
     {
-      url: 'https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=2560&q=85',
-      photographer: 'Robert Lukeman',
-      link: 'https://unsplash.com/@robertlukeman',
+      url: 'https://images.unsplash.com/photo-1508144753681-9986d4df99b3?w=2560&q=85&fm=webp&auto=format',
+      photographer: 'Luca Bravo',
+      link: 'https://unsplash.com/@lucabravo',
       source: 'Unsplash',
-      location: 'Green meadow, New Zealand'
+      location: 'Dolomites, Italy'
     },
     {
-      url: 'https://images.unsplash.com/photo-1433086966358-54859d0ed716?w=2560&q=85',
-      photographer: 'Kazuend',
-      link: 'https://unsplash.com/@kazuend',
+      url: 'https://images.unsplash.com/photo-1473283147055-e39c51463929?w=2560&q=85&fm=webp&auto=format',
+      photographer: 'Luca Bravo',
+      link: 'https://unsplash.com/@lucabravo',
       source: 'Unsplash',
-      location: 'Waterfall bridge, Bali'
+      location: 'Lago di Braies, Italy'
     },
     {
-      url: 'https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?w=2560&q=85',
+      url: 'https://images.unsplash.com/photo-1751249389638-37ea528a7026?w=2560&q=85&fm=webp&auto=format',
       photographer: 'Matt Palmer',
       link: 'https://unsplash.com/@mattpalmer',
       source: 'Unsplash',
-      location: 'Pine forest, California'
+      location: 'Mie, Japan'
     },
     {
-      url: 'https://images.unsplash.com/photo-1505765050516-f72dcac9c60e?w=2560&q=85',
-      photographer: 'Jainik Vora',
-      link: 'https://unsplash.com/@jainikvora',
+      url: 'https://images.unsplash.com/photo-1628075264489-f69550ac4dbb?w=2560&q=85&fm=webp&auto=format',
+      photographer: 'Matt Palmer',
+      link: 'https://unsplash.com/@mattpalmer',
       source: 'Unsplash',
-      location: 'Misty mountains, India'
+      location: 'Tasmania, Australia'
     },
     {
-      url: 'https://images.unsplash.com/photo-1518173946687-a544757caa5b?w=2560&q=85',
-      photographer: 'Casey Horner',
-      link: 'https://unsplash.com/@mischievous_penguins',
+      url: 'https://images.unsplash.com/photo-1628075264881-5662f943aad2?w=2560&q=85&fm=webp&auto=format',
+      photographer: 'Matt Palmer',
+      link: 'https://unsplash.com/@mattpalmer',
       source: 'Unsplash',
-      location: 'Rolling hills, Iceland'
+      location: 'Death Valley, USA'
     }
   ];
 
