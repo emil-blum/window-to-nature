@@ -500,13 +500,6 @@ body.ui-visible .ui-layer * { pointer-events: auto; }
   font-weight: 300; letter-spacing: 0.04em;
 }
 
-.info-desktop-note {
-  font-size: 12px !important;
-  color: rgba(255,255,255,0.28) !important;
-  font-style: italic;
-  margin-bottom: 0 !important;
-}
-
 /* ══════════════════════════════════════════════
    MOBILE
    ══════════════════════════════════════════════ */

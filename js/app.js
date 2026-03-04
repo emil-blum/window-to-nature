@@ -377,6 +377,20 @@
       org: 'Africam',
       link: 'https://www.africam.com/',
       location: 'Kenya'
+    },
+    {
+      embedId: 'v4zcdC-fEKw',
+      title: 'Victoria Falls Safari Lodge',
+      org: 'Africam',
+      link: 'https://www.africam.com/',
+      location: 'Zimbabwe'
+    },
+    {
+      embedId: 'uguioUQHH0M',
+      title: 'Stony Point Nature Reserve',
+      org: 'Africam',
+      link: 'https://www.africam.com/',
+      location: 'South Africa'
     }
   ];
 
