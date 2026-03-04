@@ -397,6 +397,14 @@
   //  STATE
   // =============================================
 
+  // Pick image width once at load time based on screen size.
+  // Mobile gets 1080px (covers 2× displays up to 540px wide).
+  // Desktop gets 2560px for retina/large monitors.
+  var IMG_WIDTH = window.innerWidth <= 768 ? 1080 : 2560;
+  function imgUrl(url) {
+    return url.replace(/([?&])w=\d+/, '$1w=' + IMG_WIDTH);
+  }
+
   var mode = 'images';
   var currentIndex = 0;
   var activeScene = 'a';
@@ -524,11 +532,12 @@
     statusText.textContent = 'Loading your view...';
     statusEl.classList.remove('hidden');
 
+    var src = imgUrl(item.url);
     var img = new Image();
     img.onload = function() {
       target.innerHTML = '';
       var imgEl = document.createElement('img');
-      imgEl.src = item.url;
+      imgEl.src = src;
       imgEl.alt = item.location || 'Nature';
       imgEl.draggable = false;
       target.appendChild(imgEl);
@@ -542,7 +551,7 @@
       isTransitioning = false;
       updateUI();
     };
-    img.src = item.url;
+    img.src = src;
   }
 
   function renderStream(index) {
