@@ -190,7 +190,7 @@ body.ui-visible .ui-layer * { pointer-events: auto; }
 
 /* ── Mode toggle ── */
 .mode-toggle {
-  position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+  position: absolute; top: 7px; left: 50%; transform: translateX(-50%);
   display: flex; align-items: center;
   background: var(--pill-bg);
   backdrop-filter: var(--pill-blur); -webkit-backdrop-filter: var(--pill-blur);
@@ -277,7 +277,7 @@ body.ui-visible .ui-layer * { pointer-events: auto; }
 
 .top-right-group {
   position: absolute;
-  top: 10px; right: 12px;
+  top: 7px; right: 12px;
   display: flex; align-items: center;
   gap: 10px;
 }
@@ -528,83 +528,71 @@ body.ui-visible .ui-layer * { pointer-events: auto; }
   /* Keyboard hints are irrelevant on touch */
   .keyboard-hint { display: none; }
 
-  /* ── Mobile audio: bottom panel ──
-     Always anchored at bottom:0 so CSS never animates the position —
-     that was the source of the "jump". Collapsed = transparent strip
-     with the toggle pill floating at bottom-right above the credit line.
-     Expanded = full-width frosted panel that grows upward. */
+  /* ── Mobile audio: decoupled toggle + sliding controls panel ──
+     The wrapper is zeroed out so it vanishes from the top-right-group layout.
+     The toggle pill is independently fixed at bottom-right — it never moves.
+     The controls panel slides in/out via translateY — pure GPU animation,
+     no position jumps, no phantom backgrounds. */
 
-  .audio-player {
+  .audio-player,
+  .audio-player.collapsed,
+  .audio-player.expanded {
     position: fixed;
-    bottom: 0; left: 0; right: 0;
+    top: 0; left: 0;
+    width: 0; height: 0;
+    padding: 0;
+    background: none !important;
+    border: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
     overflow: visible;
-    /* Explicit transition list — no 'bottom', no jump */
-    transition: padding 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-                background-color 0.4s ease,
-                border-color 0.4s ease,
-                border-radius 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-                gap 0.3s ease;
+    transition: none;
+    border-radius: 0;
+    gap: 0;
   }
 
-  .audio-player.collapsed {
-    padding: 0 16px 62px;             /* bottom pad floats icon above credit */
-    background: transparent;
-    border-color: transparent;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    justify-content: flex-end;
-    align-items: flex-end;
-  }
-
-  /* Give the toggle button its own pill when the container is transparent */
-  .audio-player.collapsed .audio-toggle {
+  /* Toggle: standalone frosted pill, never moves */
+  .audio-toggle {
+    position: fixed;
+    bottom: 62px; right: 16px;
+    width: 40px; height: 40px;
     background: var(--pill-bg);
     backdrop-filter: var(--pill-blur);
     -webkit-backdrop-filter: var(--pill-blur);
     border: 1px solid var(--pill-border);
     border-radius: 50%;
-    width: 40px;
-    height: 40px;
+    color: rgba(255,255,255,0.5);
+    cursor: pointer;
+    z-index: 15;
+    transition: color 0.25s ease, background 0.25s ease;
   }
 
-  /* Expanded: grows upward from bottom edge */
-  .audio-player.expanded {
-    border-radius: 20px 20px 0 0;
+  .audio-toggle.active { color: rgba(255,255,255,0.9); }
+
+  /* Controls: slides up from below viewport */
+  .audio-controls {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    max-width: none !important;
+    opacity: 1 !important;
+    display: flex; align-items: center; gap: 8px;
     padding: 14px 20px 36px;          /* 36px clears iPhone home indicator */
     background: rgba(0, 0, 0, 0.88);
+    border-radius: 20px 20px 0 0;
     border: 1px solid rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
-    gap: 4px;
     overflow: hidden;
+    transform: translateY(100%);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none !important;
   }
 
   .audio-player.expanded .audio-controls {
-    max-width: 100vw !important;
-    opacity: 1 !important;
-    flex: 1;
-    gap: 8px;
+    transform: translateY(0);
+    pointer-events: auto !important;
   }
 
-  .audio-player.expanded .audio-toggle {
-    flex-shrink: 0;
-  }
-
-  .audio-track-name {
-    flex: 1;
-    max-width: none;
-    text-align: center;
-  }
-
-  .audio-volume-slider {
-    width: 72px;                      /* wider for touch targets */
-  }
-
-  /* Prevent the invisible collapsed container from eating taps */
-  body.ui-visible .audio-player.collapsed {
-    pointer-events: none;
-  }
-  body.ui-visible .audio-player.collapsed .audio-toggle {
-    pointer-events: auto;
-  }
+  .audio-track-name { flex: 1; max-width: none; text-align: center; }
+  .audio-volume-slider { width: 72px; }
 }
