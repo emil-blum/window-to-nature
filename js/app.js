@@ -404,7 +404,12 @@
   var SOUNDS = [
     { title: 'Ambience — Troodos Mountains', file: 'sounds/ambience-troodos.mp3' },
     { title: 'Bird Songs in Forest',         file: 'sounds/bird-songs-forest.mp3' },
-    { title: 'Flowing River & Bird Songs',   file: 'sounds/flowing-river-birds.mp3' }
+    { title: 'Flowing River & Bird Songs',   file: 'sounds/flowing-river-birds.mp3' },
+    { title: 'Bubbling Mountain Stream',     file: 'sounds/bubbling-mountain-stream.mp3' },
+    { title: 'Insects at Night',             file: 'sounds/insects-at-night.mp3' },
+    { title: 'Mountain Forest Stream',       file: 'sounds/mountain-forest-stream.mp3' },
+    { title: 'Nightly Insect Songs',         file: 'sounds/nightly-insect-songs.mp3' },
+    { title: 'Summer Rain',                  file: 'sounds/summer-rain.mp3' }
   ];
 
   // =============================================
