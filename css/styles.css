@@ -303,6 +303,27 @@ body.ui-visible .ui-layer * { pointer-events: auto; }
   transform: scale(1.08);
 }
 
+/* ── Fullscreen button (desktop only) ── */
+.fullscreen-btn {
+  position: absolute;
+  top: 7px; left: 12px;
+  width: 34px; height: 34px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 50%;
+  color: rgba(255,255,255,0.7);
+  cursor: pointer; transition: all 0.3s ease; outline: none;
+  flex-shrink: 0;
+}
+.fullscreen-btn svg { width: 14px; height: 14px; }
+.fullscreen-btn:hover {
+  background: rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.9);
+  transform: scale(1.08);
+}
+
 /* ══════════════════════════════════════════════
    COLLAPSIBLE AUDIO PLAYER
    ══════════════════════════════════════════════ */
@@ -520,6 +541,9 @@ body.ui-visible .ui-layer * { pointer-events: auto; }
 
   /* Keyboard hints are irrelevant on touch */
   .keyboard-hint { display: none; }
+
+  /* Fullscreen is desktop-only */
+  .fullscreen-btn { display: none; }
 
   /* ── Mobile audio: decoupled toggle + sliding controls panel ──
      The wrapper is zeroed out so it vanishes from the top-right-group layout.

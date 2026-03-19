@@ -767,6 +767,28 @@
   document.getElementById('btn-images').addEventListener('click', function() { switchMode('images'); });
   document.getElementById('btn-streams').addEventListener('click', function() { switchMode('streams'); });
 
+  // ── Fullscreen ──
+  var fsBtn       = document.getElementById('fullscreen-btn');
+  var icoExpand   = document.getElementById('ico-expand');
+  var icoCompress = document.getElementById('ico-compress');
+
+  function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen();
+    } else {
+      document.exitFullscreen();
+    }
+  }
+
+  function updateFullscreenIcon() {
+    var isFs = !!document.fullscreenElement;
+    icoExpand.style.display   = isFs ? 'none' : '';
+    icoCompress.style.display = isFs ? ''     : 'none';
+  }
+
+  fsBtn.addEventListener('click', function(e) { e.stopPropagation(); toggleFullscreen(); });
+  document.addEventListener('fullscreenchange', updateFullscreenIcon);
+
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape' && infoOverlay.classList.contains('open')) {
       closeInfo(); return;
@@ -778,6 +800,7 @@
     else if (e.key === 'ArrowLeft') goPrev();
     else if (e.key === 's' || e.key === 'S') switchMode(mode === 'images' ? 'streams' : 'images');
     else if (e.key === 'm' || e.key === 'M') toggleSound();
+    else if (e.key === 'f' || e.key === 'F') toggleFullscreen();
   });
 
   // =============================================
