@@ -810,4 +810,429 @@
   renderCurrent();
   showUI();
 
+  // =============================================
+  //  POMODORO / FOCUS TIMER
+  // =============================================
+
+  var pomState     = 'idle'; // idle | running | paused | complete | break
+  var pomTasks     = [
+    { text: '', done: false },
+    { text: '', done: false },
+    { text: '', done: false }
+  ];
+  var pomDuration  = 25;  // minutes
+  var pomRemaining = 0;   // seconds
+  var pomInterval  = null;
+
+  var pomOverlay  = document.getElementById('pom-overlay');
+  var pomBackdrop = document.getElementById('pom-backdrop');
+  var pomCloseBtn = document.getElementById('pom-close');
+  var pomBtnEl    = document.getElementById('pom-btn');
+  var pomPlayer   = document.getElementById('pomodoro-player');
+  var pomPillTask = document.getElementById('pom-pill-task');
+  var pomPillSep  = document.getElementById('pom-pill-sep');
+  var pomPillTime = document.getElementById('pom-pill-time');
+
+  function pomFmt(sec) {
+    var m = Math.floor(sec / 60);
+    var s = sec % 60;
+    return (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+  }
+
+  function pomFirstTask() {
+    for (var i = 0; i < pomTasks.length; i++) {
+      if (!pomTasks[i].done && pomTasks[i].text.trim()) return pomTasks[i].text.trim();
+    }
+    return '';
+  }
+
+  function pomTrunc(str, max) {
+    return str.length > max ? str.slice(0, max) + '…' : str;
+  }
+
+  // ── Pill ──
+
+  function pomUpdatePill() {
+    var active = (pomState === 'running' || pomState === 'paused' || pomState === 'break');
+    if (active) {
+      pomPlayer.classList.add('active');
+      pomBtnEl.classList.add('active');
+      if (pomState === 'break') {
+        pomPillTask.textContent = 'On a break';
+        pomPillSep.style.display = 'none';
+        pomPillTime.textContent = '';
+      } else {
+        var task = pomFirstTask();
+        pomPillTask.textContent = pomTrunc(task || 'Focus', 22);
+        pomPillSep.style.display = task ? '' : 'none';
+        pomPillTime.textContent = pomFmt(pomRemaining);
+      }
+    } else {
+      pomPlayer.classList.remove('active');
+      pomBtnEl.classList.remove('active');
+    }
+  }
+
+  // ── Card rendering ──
+
+  function pomRenderCard() {
+    var title        = document.getElementById('pom-title');
+    var completeMsg  = document.getElementById('pom-complete-msg');
+    var breakMsg     = document.getElementById('pom-break-msg');
+    var timeDisplay  = document.getElementById('pom-time-display');
+    var timeBig      = document.getElementById('pom-time-big');
+    var durSection   = document.getElementById('pom-duration-section');
+    var durInput     = document.getElementById('pom-duration-input');
+    var actions      = document.getElementById('pom-actions');
+
+    completeMsg.style.display = 'none';
+    breakMsg.style.display    = 'none';
+    timeDisplay.style.display = 'none';
+    durSection.style.display  = 'none';
+
+    if (pomState === 'idle') {
+      title.textContent = 'Focus';
+      durSection.style.display = '';
+      durInput.value = pomDuration;
+      actions.innerHTML = '<button class="pom-btn-primary" id="pom-start">Start Focus</button>';
+      document.getElementById('pom-start').addEventListener('click', pomStartTimer);
+
+    } else if (pomState === 'running' || pomState === 'paused') {
+      title.textContent = pomState === 'paused' ? 'Paused' : 'Focusing';
+      timeDisplay.style.display = '';
+      timeBig.textContent = pomFmt(pomRemaining);
+      var pauseLabel = pomState === 'running' ? 'Pause' : 'Resume';
+      actions.innerHTML =
+        '<div class="pom-btn-row">' +
+          '<button class="pom-btn-secondary" id="pom-pause">' + pauseLabel + '</button>' +
+          '<button class="pom-btn-secondary" id="pom-reset">Reset</button>' +
+        '</div>';
+      document.getElementById('pom-pause').addEventListener('click', pomTogglePause);
+      document.getElementById('pom-reset').addEventListener('click', pomReset);
+
+    } else if (pomState === 'complete') {
+      title.textContent = 'Session done';
+      completeMsg.style.display = '';
+      actions.innerHTML =
+        '<div class="pom-btn-row">' +
+          '<button class="pom-btn-secondary" id="pom-take-break">Take a break</button>' +
+          '<button class="pom-btn-primary" style="flex:1" id="pom-keep-going">Keep going</button>' +
+        '</div>';
+      document.getElementById('pom-take-break').addEventListener('click', pomTakeBreak);
+      document.getElementById('pom-keep-going').addEventListener('click', pomKeepGoing);
+
+    } else if (pomState === 'break') {
+      title.textContent = 'On a break';
+      breakMsg.style.display = '';
+      actions.innerHTML = '<button class="pom-btn-primary" id="pom-back-focus">Back to focus</button>';
+      document.getElementById('pom-back-focus').addEventListener('click', pomBackToFocus);
+    }
+
+    pomRenderTasks();
+  }
+
+  // ── Task rendering ──
+
+  function pomRenderTasks() {
+    var container = document.getElementById('pom-tasks');
+    var canEdit = (pomState === 'idle');
+    var canDrag = (pomState === 'idle');
+
+    container.innerHTML = '';
+
+    // pomTasks array order IS the display order — no separate sort.
+    // Done tasks are moved to end of the array by the checkbox handler.
+    pomTasks.forEach(function(task, idx) {
+      var item = document.createElement('div');
+      item.className = 'pom-task-item' + (task.done ? ' done' : '');
+
+      if (canDrag && !task.done) {
+        var handle = document.createElement('div');
+        handle.className = 'pom-drag-handle';
+        for (var k = 0; k < 3; k++) handle.appendChild(document.createElement('span'));
+        item.appendChild(handle);
+        pomBindPointerDrag(handle, item, idx, container);
+      }
+
+      var check = document.createElement('button');
+      check.className = 'pom-task-check';
+      check.setAttribute('aria-label', 'Mark done');
+      check.innerHTML = '<svg viewBox="0 0 12 12" fill="none" stroke="rgba(255,255,255,0.75)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 5 9 10 3"/></svg>';
+      check.addEventListener('click', function(e) {
+        e.stopPropagation();
+        task.done = !task.done;
+        // Move done tasks to end; undone tasks before first done task
+        pomTasks.splice(idx, 1);
+        if (task.done) {
+          pomTasks.push(task);
+        } else {
+          var firstDone = -1;
+          for (var j = 0; j < pomTasks.length; j++) {
+            if (pomTasks[j].done) { firstDone = j; break; }
+          }
+          pomTasks.splice(firstDone === -1 ? pomTasks.length : firstDone, 0, task);
+        }
+        pomRenderTasks();
+      });
+      item.appendChild(check);
+
+      var input = document.createElement('input');
+      input.type = 'text';
+      input.className = 'pom-task-input';
+      input.placeholder = 'Task ' + (idx + 1) + '…';
+      input.value = task.text;
+      input.maxLength = 60;
+      if (!canEdit) input.readOnly = true;
+      input.addEventListener('input', function() { task.text = input.value; pomUpdatePill(); });
+      input.addEventListener('click', function(e) { e.stopPropagation(); });
+      input.addEventListener('mousedown', function(e) { e.stopPropagation(); });
+      item.appendChild(input);
+
+      container.appendChild(item);
+    });
+  }
+
+  // ── Pointer-based drag with physical slide animation ──
+
+  function pomBindPointerDrag(handle, itemEl, srcIdx, container) {
+    handle.style.touchAction = 'none';
+
+    handle.addEventListener('pointerdown', function(e) {
+      if (e.button !== 0) return;
+      e.preventDefault();
+      e.stopPropagation();
+
+      var allItems = Array.from(container.querySelectorAll('.pom-task-item'));
+      var itemRect = itemEl.getBoundingClientRect();
+      var offsetY  = e.clientY - itemRect.top;
+      var itemH    = itemEl.offsetHeight;
+      var slotH    = itemH + 6; // matches CSS gap:6px
+
+      // Snapshot natural Y centres of all slots before any animation
+      var naturalMids = allItems.map(function(el) {
+        return el.getBoundingClientRect().top + el.offsetHeight / 2;
+      });
+
+      // Floating clone that follows the pointer
+      var clone = itemEl.cloneNode(true);
+      clone.style.cssText = [
+        'position:fixed',
+        'left:'  + itemRect.left  + 'px',
+        'width:' + itemRect.width + 'px',
+        'top:'   + itemRect.top   + 'px',
+        'z-index:9999',
+        'pointer-events:none',
+        'transform:scale(1.03)',
+        'box-shadow:0 10px 36px rgba(0,0,0,0.6)',
+        'border:1px solid rgba(255,255,255,0.25)',
+        'background:rgba(28,28,32,0.97)',
+        'border-radius:10px',
+        'transition:box-shadow 0.15s ease'
+      ].join(';');
+      document.body.appendChild(clone);
+
+      // Original slot becomes invisible placeholder (keeps the gap)
+      itemEl.style.opacity = '0';
+
+      // Pre-enable smooth slide on siblings
+      allItems.forEach(function(el) {
+        if (el !== itemEl) el.style.transition = 'transform 0.18s cubic-bezier(0.16,1,0.3,1)';
+      });
+
+      var targetIdx = srcIdx;
+
+      function calcTarget(clientY) {
+        // Find which slot the pointer's centre sits above
+        var t = 0;
+        for (var i = 0; i < allItems.length; i++) {
+          if (clientY > naturalMids[i]) t = i + 1;
+        }
+        return Math.min(allItems.length - 1, t);
+      }
+
+      function applyShifts(tgt) {
+        allItems.forEach(function(el, i) {
+          if (el === itemEl) return;
+          var shift = 0;
+          if (srcIdx < tgt && i > srcIdx && i <= tgt)  shift = -slotH;
+          if (srcIdx > tgt && i >= tgt && i < srcIdx)  shift =  slotH;
+          el.style.transform = shift ? 'translateY(' + shift + 'px)' : '';
+        });
+      }
+
+      handle.setPointerCapture(e.pointerId);
+
+      function onMove(e) {
+        clone.style.top = (e.clientY - offsetY) + 'px';
+        var t = calcTarget(e.clientY);
+        if (t !== targetIdx) { targetIdx = t; applyShifts(targetIdx); }
+      }
+
+      function onEnd() {
+        handle.removeEventListener('pointermove', onMove);
+        handle.removeEventListener('pointerup',   onEnd);
+        handle.removeEventListener('pointercancel', onEnd);
+
+        clone.remove();
+        itemEl.style.opacity = '';
+        allItems.forEach(function(el) { el.style.transform = ''; el.style.transition = ''; });
+
+        if (targetIdx !== srcIdx) {
+          var moved = pomTasks.splice(srcIdx, 1)[0];
+          pomTasks.splice(targetIdx, 0, moved);
+          pomRenderTasks();
+        }
+      }
+
+      handle.addEventListener('pointermove', onMove);
+      handle.addEventListener('pointerup',   onEnd);
+      handle.addEventListener('pointercancel', onEnd);
+
+      applyShifts(targetIdx);
+    });
+  }
+
+  // ── Timer ──
+
+  function pomTick() {
+    if (pomState !== 'running') return;
+    pomRemaining--;
+    pomUpdatePill();
+    var timeBig = document.getElementById('pom-time-big');
+    if (timeBig) timeBig.textContent = pomFmt(pomRemaining);
+    if (pomRemaining <= 0) {
+      clearInterval(pomInterval);
+      pomInterval = null;
+      pomSessionComplete();
+    }
+  }
+
+  function pomStartTimer() {
+    var durInput = document.getElementById('pom-duration-input');
+    if (durInput) pomDuration = Math.max(1, Math.min(180, parseInt(durInput.value, 10) || 25));
+    pomRemaining = pomDuration * 60;
+    pomState = 'running';
+    clearInterval(pomInterval);
+    pomInterval = setInterval(pomTick, 1000);
+    pomClosePop();
+    pomUpdatePill();
+  }
+
+  function pomTogglePause() {
+    if (pomState === 'running') {
+      pomState = 'paused';
+      clearInterval(pomInterval);
+      pomInterval = null;
+    } else if (pomState === 'paused') {
+      pomState = 'running';
+      pomInterval = setInterval(pomTick, 1000);
+    }
+    pomRenderCard();
+    pomUpdatePill();
+  }
+
+  function pomReset() {
+    clearInterval(pomInterval);
+    pomInterval = null;
+    pomState = 'idle';
+    pomRemaining = 0;
+    pomUpdatePill();
+    pomRenderCard();
+  }
+
+  function pomSessionComplete() {
+    pomState = 'complete';
+    pomUpdatePill();
+    pomPlayPing();
+    pomPauseNatureSounds();
+    pomOpenPop();
+  }
+
+  function pomTakeBreak() {
+    pomState = 'break';
+    pomUpdatePill();
+    pomClosePop();
+  }
+
+  function pomKeepGoing() {
+    pomState = 'idle';
+    pomRenderCard();
+  }
+
+  function pomBackToFocus() {
+    pomState = 'idle';
+    pomRenderCard();
+  }
+
+  // ── Overlay ──
+
+  function pomOpenPop() {
+    pomRenderCard();
+    pomOverlay.classList.add('open');
+  }
+
+  function pomClosePop() {
+    pomOverlay.classList.remove('open');
+    if (pomState === 'complete') {
+      pomState = 'idle';
+      pomUpdatePill();
+    }
+  }
+
+  // ── Sound ping (Web Audio API) ──
+
+  function pomPlayPing() {
+    try {
+      var ctx = new (window.AudioContext || window.webkitAudioContext)();
+      [[0, 880], [0.35, 1108], [0.7, 880]].forEach(function(pair) {
+        var delay = pair[0], freq = pair[1];
+        var osc  = ctx.createOscillator();
+        var gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.type = 'sine';
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0, ctx.currentTime + delay);
+        gain.gain.linearRampToValueAtTime(0.18, ctx.currentTime + delay + 0.01);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay + 0.9);
+        osc.start(ctx.currentTime + delay);
+        osc.stop(ctx.currentTime + delay + 0.95);
+      });
+    } catch(e) {}
+  }
+
+  function pomPauseNatureSounds() {
+    if (soundPlaying && audioEl) {
+      audioEl.pause();
+      soundPlaying = false;
+      updateSoundUI();
+    }
+  }
+
+  // ── Events ──
+
+  pomBtnEl.addEventListener('click', function(e) {
+    e.stopPropagation();
+    if (pomOverlay.classList.contains('open')) pomClosePop();
+    else pomOpenPop();
+  });
+
+  pomCloseBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    pomClosePop();
+  });
+
+  pomBackdrop.addEventListener('click', function(e) {
+    e.stopPropagation();
+    pomClosePop();
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && pomOverlay.classList.contains('open')) {
+      pomClosePop();
+    }
+  });
+
+  pomRenderTasks();
+
 })();

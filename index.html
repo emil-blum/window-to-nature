@@ -120,6 +120,17 @@
         </button>
       </div>
 
+      <div class="pomodoro-player" id="pomodoro-player">
+        <div class="pom-pill-info" id="pom-pill-info">
+          <span class="pom-pill-task" id="pom-pill-task"></span>
+          <span class="pom-pill-sep" id="pom-pill-sep">·</span>
+          <span class="pom-pill-time" id="pom-pill-time"></span>
+        </div>
+        <button class="pom-btn" id="pom-btn" aria-label="Focus timer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </button>
+      </div>
+
       <button class="info-btn" id="info-btn" aria-label="About Window to Nature">i</button>
     </div>
 
@@ -153,6 +164,42 @@
       <span class="key-icon">F</span> fullscreen
     </div>
 
+  </div>
+
+  <!-- Pomodoro overlay -->
+  <div class="pom-overlay" id="pom-overlay">
+    <div class="pom-backdrop" id="pom-backdrop"></div>
+    <div class="pom-card" id="pom-card">
+      <button class="info-card-close" id="pom-close">&times;</button>
+      <h2 class="pom-title" id="pom-title">Focus</h2>
+
+      <div class="pom-complete-msg" id="pom-complete-msg" style="display:none">
+        <p>Session done. Take a break or keep going?</p>
+      </div>
+
+      <div class="pom-break-msg" id="pom-break-msg" style="display:none">
+        <p>Take it easy. Come back when you're ready.</p>
+      </div>
+
+      <div class="pom-time-display" id="pom-time-display" style="display:none">
+        <span class="pom-time-big" id="pom-time-big">25:00</span>
+      </div>
+
+      <div class="pom-section" id="pom-tasks-section">
+        <div class="pom-section-label">Tasks</div>
+        <div class="pom-tasks" id="pom-tasks"></div>
+      </div>
+
+      <div class="pom-section" id="pom-duration-section" style="display:none">
+        <div class="pom-section-label">Duration</div>
+        <div class="pom-duration-row">
+          <input type="number" class="pom-duration-input" id="pom-duration-input" value="25" min="1" max="180">
+          <span class="pom-duration-label">min</span>
+        </div>
+      </div>
+
+      <div class="pom-actions" id="pom-actions"></div>
+    </div>
   </div>
 
   <script src="js/app.js"></script>
